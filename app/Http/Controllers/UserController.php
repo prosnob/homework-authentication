@@ -8,7 +8,15 @@ use Illuminate\Support\Facades\Hash;
 
 
 class UserController extends Controller
-{
+{   
+    public function index(Request $request){
+        return User::with(["posts"])->latest()->get();
+    }
+
+    public function show(Request $request){
+        return User::with(["posts"])->findOrFail($id);
+    }
+
     public function signup(Request $request){
 
         $request->validate([

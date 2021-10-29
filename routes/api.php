@@ -16,37 +16,22 @@ use App\Http\Controllers\UserController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-
-
-// Route::get("user",[PostController::class, "index"]);
-Route::get("user",[PostController::class, "store"]);
-
-Route::get("user",[PostController::class, "index"]);
-// Route::get("user",[PostController::class, "index"]);
-Route::post("user",[PostController::class, "store"]);
-
 
 // Publice Route
 Route::get("user",[UserController::class, "index"]);
 Route::get("user/{id}",[UserController::class, "show"]);
-Route::get("signin",[UserController::class, "signin"]);
-Route::get("login",[UserController::class, "login"]);
+Route::post("signup",[UserController::class, "signup"]);
+Route::post("login",[UserController::class, "login"]);
 
-Route::get("user",[PostController::class, "index"]);
-Route::get("user/{id}",[PostController::class, "show"]);
-
-
+Route::get("post",[PostController::class, "index"]);
+Route::get("post/{id}",[PostController::class, "show"]);
 
 
 // Private Route
 
 Route::group(["middleware"=>["auth:sanctum"]],function(){
     Route::post("post",[PostController::class, "store"]);
-    Route::put("post",[PostController::class, "update"]);
-    Route::delete("post",[PostController::class, "destroy"]);
+    Route::put("post/{id}",[PostController::class, "update"]);
+    Route::delete("post/{id}",[PostController::class, "destroy"]);
     Route::post("signout",[UserController::class, "signout"]);
 });

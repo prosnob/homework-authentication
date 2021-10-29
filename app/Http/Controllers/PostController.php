@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Post;
 
 class PostController extends Controller
 {
@@ -13,7 +14,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        return Post::with(["user"])->latest()->get();
     }
 
     /**
@@ -24,7 +25,12 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $post = new Post();
+        $post->user_id = $request->user_id;
+        $post->title = $request->title;
+        $post->body = $request->body;
+        $post->save();
+        return response()->json(["message"=>"Post Created","data"=>$post],200);
     }
 
     /**
@@ -35,7 +41,7 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        //
+        return Post::with(["user"])->findOrFail($id);
     }
 
     /**
@@ -47,7 +53,12 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $post = Post::findOrFail($id);
+        $post->user_id = $request->user_id;
+        $post->title = $request->title;
+        $post->body = $request->body;
+        $post->save();
+        return response()->json(["message"=>"Post Updated","data"=>$post],201);
     }
 
     /**
@@ -58,6 +69,10 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $isDelete = Post::destroy($id);
+        if($isDelete){
+            return response()->json(["message"=>"deleted"],201);
+        }
+        return response()->json(["message"=>"deleted_error"],404);
     }
 }
